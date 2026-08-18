@@ -7,9 +7,12 @@ const adminRoutes = require('./routes/admin.routes');
 const productRoutes = require('./routes/product.routes');
 const chatRoutes = require('./routes/chat.routes');
 
+const path = require('path');
+
 const app = express();
 
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(
   session({
@@ -26,10 +29,6 @@ app.use(
 app.use('/api/admin', adminRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/chat', chatRoutes);
-
-app.get('/', (req, res) => {
-  res.json({ message: 'CS Bot API jalan bre 🤖' });
-});
 
 const PORT = process.env.PORT || 3000;
 
