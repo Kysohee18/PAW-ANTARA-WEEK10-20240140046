@@ -3,25 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CS Bot AI - Toko Kita</title>
+  <title>CS Bot AI — Toko Kita Customer Service</title>
+  
+  <!-- Modern Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --bg-color: #0f172a;
-      --card-bg: #1e293b;
-      --card-border: #334155;
-      --primary: #2563eb;
-      --primary-hover: #1d4ed8;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --user-msg-bg: #2563eb;
-      --bot-msg-bg: #334155;
+      --bg-dark: #090d16;
+      --panel-bg: #111827;
+      --card-bg: #1f2937;
+      --card-border: #374151;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --primary-glow: rgba(59, 130, 246, 0.25);
+      --text-main: #f9fafb;
+      --text-sub: #9ca3af;
+      --text-muted: #6b7280;
+      --user-bubble: #2563eb;
+      --bot-bubble: #1f2937;
       --success: #10b981;
+      --success-glow: rgba(16, 185, 129, 0.2);
       --warning: #f59e0b;
+      --warning-glow: rgba(245, 158, 11, 0.2);
       --danger: #ef4444;
-      --radius: 12px;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
     }
 
     * {
@@ -29,277 +39,419 @@
       margin: 0;
       padding: 0;
       font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
     }
 
     body {
-      background-color: var(--bg-color);
+      background-color: var(--bg-dark);
       color: var(--text-main);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow: hidden;
     }
 
-    /* Layout Header */
+    h1, h2, h3, h4, .font-heading {
+      font-family: 'Outfit', sans-serif;
+    }
+
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(17, 24, 39, 0.5);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #374151;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #4b5563;
+    }
+
+    /* Header Bar */
     header {
-      background-color: var(--card-bg);
+      background-color: rgba(17, 24, 39, 0.85);
+      backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--card-border);
-      padding: 1rem 1.5rem;
+      padding: 0.9rem 1.75rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      z-index: 10;
     }
 
-    .brand {
+    .brand-group {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
     }
 
-    .brand-icon {
-      width: 40px;
-      height: 40px;
-      background: linear-gradient(135deg, #2563eb, #3b82f6);
-      border-radius: 10px;
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 22px;
+      box-shadow: 0 4px 14px var(--primary-glow);
     }
 
-    .brand-info h1 {
-      font-size: 1.1rem;
+    .brand-title h1 {
+      font-size: 1.15rem;
       font-weight: 700;
+      letter-spacing: -0.01em;
       color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .brand-info p {
+    .brand-title p {
       font-size: 0.8rem;
-      color: var(--text-muted);
+      color: var(--text-sub);
     }
 
-    .header-actions {
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--success);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--success);
+      display: inline-block;
+    }
+
+    .header-controls {
       display: flex;
       align-items: center;
       gap: 12px;
     }
 
+    /* Consent Pill Badge */
     .consent-badge {
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 600;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
+      padding: 7px 14px;
+      border-radius: 30px;
+      font-size: 0.82rem;
+      font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s;
+      user-select: none;
+      transition: all 0.25s ease;
     }
 
     .consent-badge.active {
-      background-color: rgba(16, 185, 129, 0.15);
+      background-color: var(--success-glow);
       color: #34d399;
-      border: 1px solid rgba(16, 185, 129, 0.3);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+
+    .consent-badge.active:hover {
+      background-color: rgba(16, 185, 129, 0.3);
     }
 
     .consent-badge.inactive {
-      background-color: rgba(245, 158, 11, 0.15);
+      background-color: var(--warning-glow);
       color: #fbbf24;
-      border: 1px solid rgba(245, 158, 11, 0.3);
+      border: 1px solid rgba(245, 158, 11, 0.35);
     }
 
-    .btn-secondary {
-      background: #334155;
-      color: #f8fafc;
-      border: 1px solid #475569;
-      padding: 8px 14px;
-      border-radius: 8px;
-      font-size: 0.85rem;
+    .consent-badge.inactive:hover {
+      background-color: rgba(245, 158, 11, 0.3);
+    }
+
+    .btn-icon-text {
+      background-color: var(--card-bg);
+      color: var(--text-main);
+      border: 1px solid var(--card-border);
+      padding: 7px 14px;
+      border-radius: 10px;
+      font-size: 0.82rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
     }
 
-    .btn-secondary:hover {
-      background: #475569;
+    .btn-icon-text:hover {
+      background-color: #374151;
+      border-color: #4b5563;
     }
 
-    /* Main Container */
-    .app-container {
-      display: flex;
+    /* Main App Layout */
+    .app-body {
+      display: grid;
+      grid-template-columns: 1fr 440px;
       flex: 1;
-      max-width: 1400px;
-      width: 100%;
-      margin: 0 auto;
-      height: calc(100vh - 73px);
+      height: calc(100vh - 69px);
     }
 
-    /* Chat Section */
-    .chat-section {
-      flex: 1;
+    /* Left: Chat Workspace */
+    .chat-container {
       display: flex;
       flex-direction: column;
+      background-color: var(--bg-dark);
       border-right: 1px solid var(--card-border);
+      position: relative;
     }
 
     .chat-messages {
       flex: 1;
-      padding: 1.5rem;
       overflow-y: auto;
+      padding: 1.75rem;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 1.25rem;
     }
 
-    .msg-group {
+    .chat-row {
       display: flex;
-      flex-direction: column;
-      max-width: 80%;
+      gap: 12px;
+      max-width: 82%;
+      animation: fadeIn 0.3s ease;
     }
 
-    .msg-group.user {
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .chat-row.user {
       align-self: flex-end;
+      flex-direction: row-reverse;
     }
 
-    .msg-group.bot {
+    .chat-row.bot {
       align-self: flex-start;
     }
 
-    .msg-bubble {
-      padding: 12px 16px;
-      border-radius: 16px;
-      font-size: 0.95rem;
-      line-height: 1.5;
-      white-space: pre-wrap;
-      word-break: break-word;
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
     }
 
-    .msg-group.user .msg-bubble {
-      background-color: var(--user-msg-bg);
+    .chat-row.bot .avatar {
+      background: linear-gradient(135deg, #1f2937, #374151);
+      border: 1px solid var(--card-border);
+    }
+
+    .chat-row.user .avatar {
+      background: var(--user-bubble);
       color: white;
-      border-bottom-right-radius: 4px;
     }
 
-    .msg-group.bot .msg-bubble {
-      background-color: var(--bot-msg-bg);
+    .bubble-wrapper {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-bubble {
+      padding: 14px 18px;
+      border-radius: 16px;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      word-break: break-word;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .chat-row.user .chat-bubble {
+      background-color: var(--user-bubble);
+      color: #ffffff;
+      border-top-right-radius: 4px;
+    }
+
+    .chat-row.bot .chat-bubble {
+      background-color: var(--bot-bubble);
       color: var(--text-main);
-      border-bottom-left-radius: 4px;
+      border: 1px solid var(--card-border);
+      border-top-left-radius: 4px;
     }
 
-    .msg-time {
-      font-size: 0.7rem;
+    .meta-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 5px;
+      font-size: 0.72rem;
       color: var(--text-muted);
-      margin-top: 4px;
-      padding: 0 4px;
     }
 
-    .msg-group.user .msg-time {
-      text-align: right;
+    .chat-row.user .meta-bar {
+      justify-content: flex-end;
     }
 
-    /* Quick Prompts */
-    .quick-prompts {
+    /* Quick Suggestion Chips */
+    .quick-chips {
       display: flex;
       gap: 8px;
-      padding: 0 1.5rem 10px;
+      padding: 0 1.75rem 12px;
       overflow-x: auto;
     }
 
-    .quick-chip {
-      background-color: rgba(51, 65, 85, 0.6);
+    .chip-btn {
+      background-color: rgba(31, 41, 55, 0.7);
       border: 1px solid var(--card-border);
-      color: var(--text-muted);
-      padding: 6px 12px;
+      color: var(--text-sub);
+      padding: 7px 14px;
       border-radius: 20px;
       font-size: 0.8rem;
+      font-weight: 500;
       cursor: pointer;
       white-space: nowrap;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
     }
 
-    .quick-chip:hover {
+    .chip-btn:hover {
       background-color: var(--card-bg);
       color: var(--text-main);
       border-color: var(--primary);
     }
 
-    /* Input Area */
-    .chat-input-area {
-      padding: 1rem 1.5rem;
-      background-color: var(--card-bg);
+    /* Input Footer */
+    .input-footer {
+      padding: 1.25rem 1.75rem;
+      background-color: var(--panel-bg);
       border-top: 1px solid var(--card-border);
     }
 
     .chat-form {
       display: flex;
-      gap: 10px;
+      gap: 12px;
     }
 
-    .chat-input {
+    .input-box {
       flex: 1;
-      background-color: #0f172a;
+      background-color: var(--bg-dark);
       border: 1px solid var(--card-border);
-      border-radius: 10px;
-      padding: 12px 16px;
-      color: white;
+      border-radius: 12px;
+      padding: 13px 18px;
+      color: var(--text-main);
       font-size: 0.95rem;
       outline: none;
-      transition: border-color 0.2s;
+      transition: all 0.2s ease;
     }
 
-    .chat-input:focus {
+    .input-box:focus {
       border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
     }
 
-    .btn-send {
-      background-color: var(--primary);
+    .send-btn {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
       color: white;
       border: none;
-      border-radius: 10px;
-      padding: 0 20px;
+      border-radius: 12px;
+      padding: 0 24px;
       font-weight: 600;
+      font-size: 0.92rem;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      transition: background-color 0.2s;
+      gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px var(--primary-glow);
     }
 
-    .btn-send:hover {
-      background-color: var(--primary-hover);
+    .send-btn:hover {
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      transform: translateY(-1px);
     }
 
-    .btn-send:disabled {
-      opacity: 0.6;
+    .send-btn:disabled {
+      opacity: 0.5;
+      transform: none;
       cursor: not-allowed;
     }
 
-    /* History Sidebar Section */
-    .history-section {
-      width: 420px;
-      background-color: #0b1120;
+    /* Right: History Drawer & Table */
+    .history-drawer {
+      background-color: var(--panel-bg);
       display: flex;
       flex-direction: column;
     }
 
-    .history-header {
-      padding: 1.2rem 1.5rem;
+    .drawer-header {
+      padding: 1.25rem 1.5rem;
       border-bottom: 1px solid var(--card-border);
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    .history-header h2 {
-      font-size: 1rem;
+    .drawer-header h2 {
+      font-size: 1.05rem;
       font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .history-body {
+    .history-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--card-border);
+      background-color: rgba(9, 13, 22, 0.4);
+    }
+
+    .stat-card {
+      background-color: var(--bg-dark);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 10px 14px;
+    }
+
+    .stat-card span {
+      display: block;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+
+    .stat-card strong {
+      font-size: 1.1rem;
+      color: var(--text-main);
+    }
+
+    .search-bar-wrap {
+      padding: 0.75rem 1.5rem;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .search-input {
+      width: 100%;
+      background-color: var(--bg-dark);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      color: var(--text-main);
+      font-size: 0.82rem;
+      outline: none;
+    }
+
+    .search-input:focus {
+      border-color: var(--primary);
+    }
+
+    .table-container {
       flex: 1;
       overflow-y: auto;
-      padding: 1rem;
+      padding: 0.75rem 1.5rem;
     }
 
     .history-table {
@@ -309,266 +461,340 @@
     }
 
     .history-table th {
-      background-color: var(--card-bg);
+      background-color: var(--bg-dark);
       color: var(--text-muted);
       text-align: left;
-      padding: 10px;
+      padding: 8px 10px;
+      font-weight: 600;
       border-bottom: 1px solid var(--card-border);
     }
 
     .history-table td {
-      padding: 10px;
-      border-bottom: 1px solid rgba(51, 65, 85, 0.4);
+      padding: 12px 10px;
+      border-bottom: 1px solid rgba(55, 65, 81, 0.5);
       vertical-align: top;
     }
 
     .history-table tr:hover {
-      background-color: rgba(30, 41, 59, 0.5);
+      background-color: rgba(31, 41, 55, 0.6);
     }
 
-    .user-text {
+    .table-user-msg {
       color: #60a5fa;
       font-weight: 600;
       margin-bottom: 4px;
     }
 
-    .bot-text {
-      color: #cbd5e1;
+    .table-bot-msg {
+      color: #d1d5db;
+      line-height: 1.4;
+    }
+
+    .badge-id {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-sub);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.75rem;
     }
 
     /* Modal Overlay */
-    .modal-overlay {
+    .modal-backdrop {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(4px);
+      background: rgba(9, 13, 22, 0.8);
+      backdrop-filter: blur(8px);
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 1000;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .modal-overlay.show {
+    .modal-backdrop.active {
       opacity: 1;
       pointer-events: auto;
     }
 
-    .modal-card {
-      background: var(--card-bg);
+    .modal-box {
+      background: var(--panel-bg);
       border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 2rem;
+      border-radius: var(--radius-lg);
+      padding: 2.25rem;
       max-width: 480px;
       width: 90%;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
       text-align: center;
-      transform: translateY(20px);
-      transition: transform 0.3s ease;
+      transform: scale(0.95) translateY(10px);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .modal-overlay.show .modal-card {
-      transform: translateY(0);
+    .modal-backdrop.active .modal-box {
+      transform: scale(1) translateY(0);
     }
 
-    .modal-icon {
-      font-size: 48px;
-      margin-bottom: 1rem;
+    .modal-shield-icon {
+      width: 60px;
+      height: 60px;
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin: 0 auto 1.25rem;
     }
 
-    .modal-card h3 {
-      font-size: 1.3rem;
-      margin-bottom: 0.5rem;
+    .modal-box h3 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.6rem;
+    }
+
+    .modal-box p {
+      font-size: 0.88rem;
+      color: var(--text-sub);
+      line-height: 1.55;
+      margin-bottom: 1.75rem;
+    }
+
+    .modal-btn-group {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-agree-primary {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      flex: 1;
+      box-shadow: 0 4px 12px var(--primary-glow);
+      transition: all 0.2s ease;
+    }
+
+    .btn-agree-primary:hover {
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      transform: translateY(-1px);
+    }
+
+    .btn-decline-subtle {
+      background-color: var(--card-bg);
+      color: var(--text-sub);
+      border: 1px solid var(--card-border);
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      flex: 1;
+      transition: all 0.2s ease;
+    }
+
+    .btn-decline-subtle:hover {
+      background-color: #374151;
       color: var(--text-main);
     }
 
-    .modal-card p {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      line-height: 1.5;
-      margin-bottom: 1.5rem;
-    }
-
-    .modal-actions {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-    }
-
-    .btn-agree {
-      background-color: var(--primary);
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-weight: 600;
-      cursor: pointer;
-      flex: 1;
-      transition: background-color 0.2s;
-    }
-
-    .btn-agree:hover {
-      background-color: var(--primary-hover);
-    }
-
-    .btn-decline {
-      background-color: #334155;
-      color: var(--text-muted);
-      border: 1px solid #475569;
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-weight: 600;
-      cursor: pointer;
-      flex: 1;
-      transition: all 0.2s;
-    }
-
-    .btn-decline:hover {
-      background-color: #475569;
-      color: white;
-    }
-
-    @media (max-width: 900px) {
-      .app-container {
-        flex-direction: column;
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .app-body {
+        grid-template-columns: 1fr;
         height: auto;
+        overflow: auto;
       }
-
-      .history-section {
-        width: 100%;
-        height: 350px;
+      body {
+        overflow: auto;
+      }
+      .history-drawer {
+        height: 450px;
+        border-top: 1px solid var(--card-border);
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Header Bar -->
+  <!-- Header Section -->
   <header>
-    <div class="brand">
-      <div class="brand-icon">🤖</div>
-      <div class="brand-info">
-        <h1>CS Bot AI - Toko Kita</h1>
-        <p>Asisten Layanan Pelanggan Otomatis</p>
+    <div class="brand-group">
+      <div class="brand-logo">🤖</div>
+      <div class="brand-title">
+        <h1>CS Bot Toko Kita <span class="status-dot" title="Bot Online"></span></h1>
+        <p>Layanan Customer Service Otomatis Berbasis Generative AI</p>
       </div>
     </div>
-    <div class="header-actions">
-      <div id="consentBadge" class="consent-badge inactive" onclick="openModal()">
+    
+    <div class="header-controls">
+      <!-- Consent Status Badge -->
+      <div id="consentBadge" class="consent-badge inactive" onclick="openConsentModal()" title="Klik untuk mengubah persetujuan simpan riwayat">
         <span>🔒</span> <span id="consentText">Riwayat: Nonaktif</span>
       </div>
-      <button class="btn-secondary" onclick="loadHistory()">🔄 Refresh Riwayat</button>
+
+      <!-- Refresh History Button -->
+      <button class="btn-icon-text" onclick="loadHistory()">
+        <span>🔄</span> Refresh Riwayat
+      </button>
     </div>
   </header>
 
-  <!-- Main Container -->
-  <div class="app-container">
+  <!-- App Workspace -->
+  <main class="app-body">
     
-    <!-- Chat Section -->
-    <section class="chat-section">
+    <!-- Left Panel: Chat Area -->
+    <section class="chat-container">
       <div class="chat-messages" id="chatMessages">
-        <div class="msg-group bot">
-          <div class="msg-bubble">Halo! 👋 Ada yang bisa saya bantu terkait produk di Toko Kita?</div>
-          <div class="msg-time">Baru saja</div>
+        
+        <!-- Welcome Message -->
+        <div class="chat-row bot">
+          <div class="avatar">🤖</div>
+          <div class="bubble-wrapper">
+            <div class="chat-bubble">
+              Halo! Selamat datang di <strong>Toko Kita</strong>. 👋<br>
+              Ada yang bisa saya bantu terkait informasi produk, stok, atau harga hari ini?
+            </div>
+            <div class="meta-bar">
+              <span>CS Bot AI</span> • <span id="welcomeTime">00:00</span>
+            </div>
+          </div>
         </div>
+
       </div>
 
-      <!-- Quick Chips -->
-      <div class="quick-prompts">
-        <button class="quick-chip" onclick="sendQuickPrompt('Ada produk apa saja?')">📦 Ada produk apa saja?</button>
-        <button class="quick-chip" onclick="sendQuickPrompt('Kaos polos harganya berapa?')">👕 Kaos polos harganya berapa?</button>
-        <button class="quick-chip" onclick="sendQuickPrompt('Apakah ada diskon produk?')">🏷️ Apakah ada diskon?</button>
+      <!-- Quick Suggestion Chips -->
+      <div class="quick-chips">
+        <button class="chip-btn" onclick="sendQuickPrompt('Ada produk apa saja di Toko Kita?')">📦 Ada produk apa saja?</button>
+        <button class="chip-btn" onclick="sendQuickPrompt('Berapa harga kaos polos dan warna apa saja?')">👕 Harga kaos polos & warna?</button>
+        <button class="chip-btn" onclick="sendQuickPrompt('Apakah ada promo atau diskon?')">🏷️ Info promo & diskon</button>
       </div>
 
-      <!-- Input Form -->
-      <div class="chat-input-area">
+      <!-- Input Footer -->
+      <div class="input-footer">
         <form class="chat-form" id="chatForm">
-          <input type="text" id="chatInput" class="chat-input" placeholder="Ketik pertanyaan tentang produk di toko kita..." autocomplete="off" required>
-          <button type="submit" id="sendBtn" class="btn-send">Kirim ➔</button>
+          <input type="text" id="chatInput" class="input-box" placeholder="Ketik pertanyaan seputar produk Toko Kita..." autocomplete="off" required>
+          <button type="submit" id="sendBtn" class="send-btn">
+            <span>Kirim</span> ➔
+          </button>
         </form>
       </div>
     </section>
 
-    <!-- History Section -->
-    <section class="history-section">
-      <div class="history-header">
-        <h2>📜 Riwayat Chat (Database)</h2>
+    <!-- Right Panel: History Database Drawer -->
+    <aside class="history-drawer">
+      <div class="drawer-header">
+        <h2>📜 Riwayat Chat Database</h2>
+        <span class="badge-id" id="syncStatus">CONNECTED</span>
       </div>
-      <div class="history-body">
+
+      <!-- Stats Summary -->
+      <div class="history-stats">
+        <div class="stat-card">
+          <span>TOTAL TERREKAM</span>
+          <strong id="statCount">0 Data</strong>
+        </div>
+        <div class="stat-card">
+          <span>STATUS PERSETUJUAN</span>
+          <strong id="statConsent">Nonaktif</strong>
+        </div>
+      </div>
+
+      <!-- Filter/Search input -->
+      <div class="search-bar-wrap">
+        <input type="text" id="searchInput" class="search-input" placeholder="🔍 Cari pesan riwayat..." oninput="filterHistory()">
+      </div>
+
+      <!-- Table Container -->
+      <div class="table-container">
         <table class="history-table">
           <thead>
             <tr>
-              <th style="width: 10%;">ID</th>
+              <th style="width: 15%;">ID</th>
               <th>Detail Percakapan</th>
               <th style="width: 25%;">Waktu</th>
             </tr>
           </thead>
-          <tbody id="historyTableBody">
+          <tbody id="historyTbody">
             <tr>
-              <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 20px;">
-                Belum ada data riwayat / Klik refresh.
+              <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 30px 10px;">
+                Memuat data riwayat...
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-    </section>
+    </aside>
 
-  </div>
+  </main>
 
-  <!-- Modal Consent Pop-Up -->
-  <div class="modal-overlay" id="consentModal">
-    <div class="modal-card">
-      <div class="modal-icon">🔐</div>
+  <!-- Consent Pop-up Modal -->
+  <div class="modal-backdrop" id="consentModal">
+    <div class="modal-box">
+      <div class="modal-shield-icon">🔐</div>
       <h3>Persetujuan Penyimpanan Riwayat</h3>
       <p>
-        Apakah Anda menyetujui percakapan Anda direkam dan disimpan ke dalam database untuk keperluan riwayat percakapan?
+        Apakah Anda menyetujui percakapan ini direkam dan disimpan ke dalam database untuk keperluan riwayat percakapan layanan pelanggan?
       </p>
-      <div class="modal-actions">
-        <button class="btn-agree" onclick="setConsent(true)">Ya, Saya Setuju</button>
-        <button class="btn-decline" onclick="setConsent(false)">Tidak Setuju</button>
+      <div class="modal-btn-group">
+        <button class="btn-agree-primary" onclick="setConsent(true)">Ya, Saya Setuju</button>
+        <button class="btn-decline-subtle" onclick="setConsent(false)">Tidak Setuju</button>
       </div>
     </div>
   </div>
 
   <script>
     let userConsent = false;
+    let rawHistoryData = [];
 
-    // Open modal on load
+    // On Load Setup
     window.addEventListener('DOMContentLoaded', () => {
-      openModal();
+      document.getElementById('welcomeTime').innerText = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      openConsentModal();
       loadHistory();
     });
 
-    function openModal() {
-      document.getElementById('consentModal').classList.add('show');
+    function openConsentModal() {
+      document.getElementById('consentModal').classList.add('active');
     }
 
-    function closeModal() {
-      document.getElementById('consentModal').classList.remove('show');
+    function closeConsentModal() {
+      document.getElementById('consentModal').classList.remove('active');
     }
 
     function setConsent(consent) {
       userConsent = consent;
       const badge = document.getElementById('consentBadge');
       const text = document.getElementById('consentText');
+      const statConsent = document.getElementById('statConsent');
 
       if (consent) {
         badge.className = 'consent-badge active';
         text.innerText = 'Riwayat: Aktif (Tersimpan)';
+        statConsent.innerText = 'Aktif';
+        statConsent.style.color = '#34d399';
       } else {
         badge.className = 'consent-badge inactive';
         text.innerText = 'Riwayat: Nonaktif';
+        statConsent.innerText = 'Nonaktif';
+        statConsent.style.color = '#fbbf24';
       }
 
-      closeModal();
+      closeConsentModal();
     }
 
-    // Handle Form Submit
+    // Chat form handler
     const chatForm = document.getElementById('chatForm');
     const chatInput = document.getElementById('chatInput');
     const chatMessages = document.getElementById('chatMessages');
@@ -579,10 +805,13 @@
       const message = chatInput.value.trim();
       if (!message) return;
 
+      // Append user bubble
       appendMessage('user', message);
       chatInput.value = '';
+
+      // Disable button with spinner state
       sendBtn.disabled = true;
-      sendBtn.innerText = '...';
+      sendBtn.innerHTML = `<span>Menjawab...</span>`;
 
       try {
         const response = await fetch('/api/chat', {
@@ -602,13 +831,13 @@
             loadHistory();
           }
         } else {
-          appendMessage('bot', '⚠️ Error: ' + (result.message || 'Gagal merespons'));
+          appendMessage('bot', '⚠️ ' + (result.message || 'Gagal memperoleh respons dari AI.'));
         }
       } catch (err) {
-        appendMessage('bot', '⚠️ Gagal terhubung ke server.');
+        appendMessage('bot', '⚠️ Terjadi kesalahan koneksi ke server.');
       } finally {
         sendBtn.disabled = false;
-        sendBtn.innerText = 'Kirim ➔';
+        sendBtn.innerHTML = `<span>Kirim</span> ➔`;
       }
     });
 
@@ -619,38 +848,43 @@
 
     function appendMessage(sender, text) {
       const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      const msgGroup = document.createElement('div');
-      msgGroup.className = `msg-group ${sender}`;
-      msgGroup.innerHTML = `
-        <div class="msg-bubble">${escapeHtml(text)}</div>
-        <div class="msg-time">${timeStr}</div>
+      const chatRow = document.createElement('div');
+      chatRow.className = `chat-row ${sender}`;
+      
+      const avatarIcon = sender === 'bot' ? '🤖' : '👤';
+      const senderName = sender === 'bot' ? 'CS Bot AI' : 'Anda';
+
+      chatRow.innerHTML = `
+        <div class="avatar">${avatarIcon}</div>
+        <div class="bubble-wrapper">
+          <div class="chat-bubble">${escapeHtml(text)}</div>
+          <div class="meta-bar">
+            <span>${senderName}</span> • <span>${timeStr}</span>
+          </div>
+        </div>
       `;
-      chatMessages.appendChild(msgGroup);
+      
+      chatMessages.appendChild(chatRow);
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
     async function loadHistory() {
-      const tbody = document.getElementById('historyTableBody');
+      const tbody = document.getElementById('historyTbody');
+      const statCount = document.getElementById('statCount');
+
       try {
         const res = await fetch('/api/chat/history');
         const json = await res.json();
 
-        if (json.success && Array.isArray(json.data) && json.data.length > 0) {
-          tbody.innerHTML = json.data.map(item => `
-            <tr>
-              <td><strong>#${item.id}</strong></td>
-              <td>
-                <div class="user-text">👤 User: ${escapeHtml(item.message)}</div>
-                <div class="bot-text">🤖 Bot: ${escapeHtml(item.response)}</div>
-              </td>
-              <td>${new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
-            </tr>
-          `).join('');
+        if (json.success && Array.isArray(json.data)) {
+          rawHistoryData = json.data;
+          statCount.innerText = `${rawHistoryData.length} Data`;
+          renderHistoryTable(rawHistoryData);
         } else {
           tbody.innerHTML = `
             <tr>
-              <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 20px;">
-                Belum ada riwayat percakapan tersimpan.
+              <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 30px 10px;">
+                Belum ada data riwayat tersimpan.
               </td>
             </tr>
           `;
@@ -658,16 +892,60 @@
       } catch (err) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="3" style="text-align: center; color: var(--danger); padding: 20px;">
-              Gagal memuat riwayat.
+            <td colspan="3" style="text-align: center; color: var(--danger); padding: 30px 10px;">
+              Gagal memuat riwayat dari server.
             </td>
           </tr>
         `;
       }
     }
 
+    function renderHistoryTable(data) {
+      const tbody = document.getElementById('historyTbody');
+
+      if (!data || data.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 30px 10px;">
+              Tidak ada data riwayat yang cocok.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = data.map(item => `
+        <tr>
+          <td><span class="badge-id">#${item.id}</span></td>
+          <td>
+            <div class="table-user-msg">👤 ${escapeHtml(item.message)}</div>
+            <div class="table-bot-msg">🤖 ${escapeHtml(item.response)}</div>
+          </td>
+          <td style="color: var(--text-muted); font-size: 0.75rem;">
+            ${new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}<br>
+            <span style="font-size: 0.68rem;">${new Date(item.createdAt).toLocaleDateString()}</span>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function filterHistory() {
+      const query = document.getElementById('searchInput').value.toLowerCase().trim();
+      if (!query) {
+        renderHistoryTable(rawHistoryData);
+        return;
+      }
+
+      const filtered = rawHistoryData.filter(item => 
+        (item.message && item.message.toLowerCase().includes(query)) ||
+        (item.response && item.response.toLowerCase().includes(query))
+      );
+
+      renderHistoryTable(filtered);
+    }
+
     function escapeHtml(str) {
-      return str.replace(/[&<>"']/g, function(m) {
+      return String(str).replace(/[&<>"']/g, function(m) {
         return {
           '&': '&amp;',
           '<': '&lt;',
