@@ -153,7 +153,8 @@ cs-bot-api/
 
 Dokumentasi tangkapan layar (*screenshot*) antarmuka Web CS Bot Fashion Assistant dan fitur riwayat percakapan:
 
-![Screenshot Antarmuka Web Chat & History](screenshots/01-web-ui-chat.png)
+<img width="1919" height="1022" alt="image" src="https://github.com/user-attachments/assets/6c074b41-3021-485c-9490-cd93cbafc599" />
+
 
 ---
 
