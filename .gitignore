@@ -3,3 +3,8 @@ node_modules/
 *.log
 .agent/
 .agents/
+
+# Ignore all markdown files except README.md
+*.md
+!README.md
+!readme.md
