@@ -4,7 +4,7 @@ Customer Service AI otomatis berbasis Gemini Generative AI yang terintegrasi den
 
 ---
 
-## 🚀 Fitur Utama
+##  Fitur Utama
 
 1. **Integrasi LLM di Server** — Menggunakan Google Gemini API dengan API key aman di `.env`.
 2. **Prompt Engineering & Grounding Data** — Bot hanya menjawab seputar data produk yang tersedia di database.
@@ -14,7 +14,7 @@ Customer Service AI otomatis berbasis Gemini Generative AI yang terintegrasi den
 
 ---
 
-## 📁 Struktur Folder
+##  Struktur Folder
 
 ```
 cs-bot-api/
@@ -50,7 +50,7 @@ cs-bot-api/
 
 ---
 
-## 🛠️ Cara Install & Menjalankan
+##  Cara Install & Menjalankan
 
 1. **Persiapan Database PostgreSQL:**
    ```sql
@@ -92,7 +92,7 @@ cs-bot-api/
 
 ---
 
-## 🔗 Daftar Endpoint API
+## Daftar Endpoint API
 
 ### 1. Chat (CS Bot) & Riwayat
 | Method | Endpoint            | Auth   | Body                                      | Keterangan                                  |
@@ -149,7 +149,7 @@ cs-bot-api/
 
 ---
 
-## 📸 Screenshot Antarmuka & Pengujian
+## Screenshot Antarmuka
 
 Dokumentasi tangkapan layar (*screenshot*) antarmuka Web CS Bot Fashion Assistant dan fitur riwayat percakapan:
 
@@ -158,7 +158,7 @@ Dokumentasi tangkapan layar (*screenshot*) antarmuka Web CS Bot Fashion Assistan
 
 ---
 
-## 🛡️ Prinsip Keamanan & Guardrail
+## Prinsip Keamanan & Guardrail
 
 - **Grounding Dinamis:** Bot mengambil informasi produk terkini langsung dari database sebelum menyusun `systemInstruction` Gemini.
 - **Anti-Prompt Injection:** Instruksi sistem dikirimkan pada field khusus `systemInstruction` SDK Gemini agar tidak tertimpa oleh pesan pengguna.
